@@ -127,7 +127,7 @@ define("simple-auth-devise/authenticators/devise",
       */
       restore: function(properties) {
         return new Ember.RSVP.Promise(function(resolve, reject) {
-          if (!Ember.isEmpty(properties.user_token) && !Ember.isEmpty(properties.user_email)) {
+          if (!Ember.isEmpty(properties.account.api_access_token) && !Ember.isEmpty(properties.account.email)) {
             resolve(properties);
           } else {
             reject();
@@ -237,8 +237,8 @@ define("simple-auth-devise/authorizers/devise",
       */
 
       authorize: function(jqXHR, requestOptions) {
-        var userToken = this.get('session.user_token');
-        var userEmail = this.get('session.user_email');
+        var userToken = this.get('session.account.api_access_token');
+        var userEmail = this.get('session.account.email');
         if (this.get('session.isAuthenticated') && !Ember.isEmpty(userToken) && !Ember.isEmpty(userEmail)) {
           if (!isSecureUrl(requestOptions.url)) {
             Ember.Logger.warn('Credentials are transmitted via an insecure connection - use HTTPS to keep them secure.');
